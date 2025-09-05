@@ -1,0 +1,55 @@
+-- ===================================================
+-- Project: New York Taxi Trips Analysis
+-- Author: Breanna Rapp
+-- Description: Analyzes NYC yellow taxi trips (2017) to identify peak times, high-fare zones, passenger trends, 
+-- and outliers, demonstrating proficiency with large datasets and advanced SQL concepts.
+-- ===================================================
+
+-- STEP 1: Preview trip data
+-- SELECT *
+-- FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2017`
+-- LIMIT 5;
+
+-- STEP 2: Preview your version of the zone dataset
+-- SELECT *
+-- FROM `bigquery-public-data.new_york_taxi_trips.taxi_zone_geom`
+-- LIMIT 5;
+
+-- STEP 3: Aggregate trips by borough and hour
+SELECT 
+  EXTRACT(HOUR FROM t.pickup_datetime) AS pickup_hour,
+  z.borough,
+  COUNT(*) AS trip_count,
+  AVG(t.fare_amount) AS avg_fare,
+  AVG(t.passenger_count) AS avg_passengers
+FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2017` t
+JOIN `bigquery-public-data.new_york_taxi_trips.taxi_zone_geom` z
+  ON t.pickup_location_id = z.zone_id
+GROUP BY z.borough, pickup_hour
+ORDER BY z.borough, pickup_hour;
+
+-- STEP 4: Identify top 10 highest-fare trips
+SELECT 
+  t.pickup_datetime,
+  t.dropoff_datetime,
+  t.passenger_count,
+  t.trip_distance,
+  t.fare_amount,
+  z.borough AS pickup_borough,
+  z.zone_name AS pickup_zone
+FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2017` t
+JOIN `bigquery-public-data.new_york_taxi_trips.taxi_zone_geom` z
+  ON t.pickup_location_id = z.zone_id
+ORDER BY t.fare_amount DESC
+LIMIT 10;
+
+-- STEP 5: Average trip distance by borough
+SELECT 
+  z.borough,
+  AVG(t.trip_distance) AS avg_trip_distance,
+  AVG(t.fare_amount) AS avg_fare
+FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2017` t
+JOIN `bigquery-public-data.new_york_taxi_trips.taxi_zone_geom` z
+  ON t.pickup_location_id = z.zone_id
+GROUP BY z.borough
+ORDER BY avg_trip_distance DESC;
