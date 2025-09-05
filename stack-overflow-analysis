@@ -1,0 +1,19 @@
+-- ===================================================
+-- Project: Stack Overflow Top Tags Analysis
+-- Author: Breanna Rapp
+-- Description: This project analyzes the Stack Overflow posts_questions dataset
+-- to determine the most common tags used in questions. 
+-- ===================================================
+
+-- STEP 1 & 2: Exploratory queries (commented out)
+-- SELECT Tags FROM ...;
+-- SELECT SPLIT(Tags, ',') AS tag_array FROM ...;
+
+-- STEP 3: Count the top 10 most common tags
+SELECT tag, COUNT(*) AS tag_count
+FROM `bigquery-public-data.stackoverflow.posts_questions`,
+UNNEST(SPLIT(Tags, ',')) AS tag
+WHERE Tags IS NOT NULL AND Tags != ''
+GROUP BY tag
+ORDER BY tag_count DESC
+LIMIT 10;
