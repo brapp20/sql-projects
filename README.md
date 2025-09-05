@@ -2,7 +2,7 @@
 
 This repository contains hands-on SQL projects analyzing real-world datasets using Google BigQuery. These projects demonstrate my ability to work with large datasets, write clean SQL, and extract meaningful insights.
 
-## 🔍 Projects
+## Projects
 
 ### 1. NYC Yellow Taxi Trips Analysis
 
@@ -33,7 +33,7 @@ This repository contains hands-on SQL projects analyzing real-world datasets usi
 
 ---
 
-## ⚙️ Tools Used
+##  Tools Used
 
 - Google BigQuery
 - SQL (Standard SQL syntax)
